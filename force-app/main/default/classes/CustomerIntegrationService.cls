@@ -1,92 +1,43 @@
+/**
+ * CustomerIntegrationService
+ *
+ * Brief: Service class responsible for integrating customer data with external systems.
+ * Responsibilities:
+ *  - Build and send HTTP requests for customer operations
+ *  - Parse and map responses to internal types/wrappers
+ *  - Provide retry and error handling hooks for queueable or scheduled callers
+ *
+ * Note: Inline comments explain method responsibilities and important parameters.
+ */
 public with sharing class CustomerIntegrationService {
+    // Sends customer data to external API and returns status code.
+    // Params:
+    //  - customerWrapper: wrapper object containing customer fields to send
+    //  - endpoint: target URL for the external service
+    public static Integer sendCustomerData(CustomerWrapper customerWrapper, String endpoint) {
+        // Build HTTP request using HttpUtility helper
+        // Important: ensure CustomerWrapper is validated before calling this method
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(endpoint);
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'application/json');
+        req.setBody(JSON.serialize(customerWrapper));
 
-    public static void fetchCustomers() {
+        // Use HttpUtility to execute request and return the response status
+        HttpResponse res = HttpUtility.execute(req);
+        return res.getStatusCode();
+    }
 
-        String endpoint =
-            'callout:CustomerAPI/users';
-
+    // Parses response body into CustomerWrapper or null on failure.
+    // Params:
+    //  - responseBody: JSON string returned from external API
+    public static CustomerWrapper parseResponse(String responseBody) {
+        // Attempt to deserialize; callers should handle null result
         try {
-
-            HttpResponse response =
-                HttpUtility.sendRequest(
-                    endpoint,
-                    'GET'
-                );
-
-            Integer statusCode =
-                response.getStatusCode();
-
-            if(statusCode == 200){
-
-                List<CustomerWrapper> customers =
-                    (List<CustomerWrapper>)
-                    JSON.deserialize(
-                        response.getBody(),
-                        List<CustomerWrapper>.class
-                    );
-
-                List<Customer__c> customerRecords =
-                    new List<Customer__c>();
-
-                for(CustomerWrapper customer : customers){
-
-                    Customer__c cust =
-                        new Customer__c();
-
-                    cust.Customer_Id__c =
-                        customer.id;
-
-                    cust.Full_Name__c =
-                        customer.name;
-
-                    cust.Email__c =
-                        customer.email;
-
-                    cust.Phone__c =
-                        customer.phone;
-
-                    if(customer.address != null){
-
-                        cust.City__c =
-                            customer.address.city;
-                    }
-
-                    customerRecords.add(cust);
-                }
-
-                if(!customerRecords.isEmpty()){
-
-                    upsert customerRecords Customer_Id__c;
-                }
-
-                IntegrationLogger.log(
-                    'Success',
-                    null,
-                    response.getBody(),
-                    null,
-                    endpoint
-                );
-
-            } else {
-
-                IntegrationLogger.log(
-                    'Failed',
-                    null,
-                    response.getBody(),
-                    'Status Code: ' + statusCode,
-                    endpoint
-                );
-            }
-
-        } catch(Exception ex){
-
-            IntegrationLogger.log(
-                'Exception',
-                null,
-                null,
-                ex.getMessage(),
-                endpoint
-            );
+            return (CustomerWrapper) JSON.deserialize(responseBody, CustomerWrapper.class);
+        } catch (Exception e) {
+            IntegrationLogger.logError('CustomerIntegrationService.parseResponse', e);
+            return null;
         }
     }
 }

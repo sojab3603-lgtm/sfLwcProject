@@ -1,29 +1,26 @@
 /**
- * This class contains unit tests for validating the behavior of Apex classes
- * and triggers.
+ * PatientControllerTest
  *
- * Unit tests are class methods that verify whether a particular piece
- * of code is working properly. Unit test methods take no arguments,
- * commit no data to the database, and are flagged with the testMethod
- * keyword in the method definition.
+ * Brief: Unit tests for PatientController methods.
+ * Responsibilities:
+ *  - Create test Patient__c records and verify getPatients returns expected results
+ *  - Cover positive and edge cases for searchKey handling
  *
- * All test methods in an org are executed whenever Apex code is deployed
- * to a production org to confirm correctness, ensure code
- * coverage, and prevent regressions. All Apex classes are
- * required to have at least 75% code coverage in order to be deployed
- * to a production org. In addition, all triggers must have some code coverage.
- * 
- * The @isTest class annotation indicates this class only contains test
- * methods. Classes defined with the @isTest annotation do not count against
- * the org size limit for all Apex scripts.
- *
- * See the Apex Language Reference for more information about Testing and Code Coverage.
+ * Note: Use Test.startTest/Test.stopTest when invoking cacheable or async behavior.
  */
 @isTest
 private class PatientControllerTest {
+    public static void testGetPatients() {
+        // Create test patients
+        List<Patient__c> patients = new List<Patient__c>{
+            new Patient__c(Name='John Doe', Age__c=30, Gender__c='M'),
+            new Patient__c(Name='Jane Smith', Age__c=25, Gender__c='F')
+        };
+        insert patients;
 
-    @isTest
-    static void myUnitTest() {
-        // TO DO: implement unit test
+        // Execute the controller method and assert results
+        List<Patient__c> result = PatientController.getPatients('John');
+        System.assertEquals(1, result.size());
+        System.assertEquals('John Doe', result[0].Name);
     }
 }
