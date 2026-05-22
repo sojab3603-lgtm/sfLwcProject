@@ -1,0 +1,98 @@
+<template>
+    <lightning-card title="Patient Form" icon-name="standard:contact">
+        <div class="slds-p-around_medium">
+            
+            <!-- Success Message -->
+            <template if:true={showSuccess}>
+                <div class="slds-notify slds-notify_alert slds-alert_success" role="alert">
+                    <span class="slds-assistive-text">success</span>
+                    <h2>Patient saved successfully!</h2>
+                </div>
+            </template>
+
+            <!-- Error Message -->
+            <template if:true={errorMessage}>
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">error</span>
+                    <h2>{errorMessage}</h2>
+                </div>
+            </template>
+
+            <!-- Form Fields -->
+            <lightning-record-edit-form
+                object-api-name={objectApiName}
+                record-id={recordId}
+                onsuccess={handleSuccess}
+                onerror={handleError}
+                onsubmit={handleSubmit}>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+                    
+                    <!-- Full Name -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input-field
+                            field-name="Full_Name__c"
+                            required>
+                        </lightning-input-field>
+                    </div>
+
+                    <!-- Age -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input-field
+                            field-name="Age__c"
+                            required>
+                        </lightning-input-field>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input-field
+                            field-name="Gender__c"
+                            required>
+                        </lightning-input-field>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input-field
+                            field-name="Phone__c"
+                            required>
+                        </lightning-input-field>
+                    </div>
+
+                    <!-- Email (optional) -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input-field
+                            field-name="Email__c">
+                        </lightning-input-field>
+                    </div>
+
+                    <!-- Address (optional) -->
+                    <div class="slds-col slds-size_1-of-1">
+                        <lightning-input-field
+                            field-name="Address__c">
+                        </lightning-input-field>
+                    </div>
+
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="slds-m-top_medium slds-text-align_right">
+                    <lightning-button
+                        variant="neutral"
+                        label="Cancel"
+                        onclick={handleCancel}
+                        class="slds-m-right_x-small">
+                    </lightning-button>
+                    <lightning-button
+                        variant="brand"
+                        type="submit"
+                        label={submitLabel}>
+                    </lightning-button>
+                </div>
+
+            </lightning-record-edit-form>
+
+        </div>
+    </lightning-card>
+</template>

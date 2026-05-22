@@ -1,0 +1,33 @@
+<template>
+
+    <div class="main-container">
+
+        <div class="header-section">
+            Patient List
+        </div>
+
+        <div class="search-box">
+
+            <lightning-input
+                type="text"
+                label="Search Patient"
+                placeholder="Enter patient name..."
+                onchange={handleSearch}>
+            </lightning-input>
+
+        </div>
+
+        <div class="table-section">
+
+            <lightning-datatable
+                key-field="Id"
+                data={patients}
+                columns={columns}
+                hide-checkbox-column>
+            </lightning-datatable>
+
+        </div>
+
+    </div>
+
+</template>

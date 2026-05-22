@@ -1,0 +1,53 @@
+:host {
+    display: block;
+}
+
+.slds-notify {
+    margin-bottom: 1rem;
+}
+
+.slds-alert_success {
+    background-color: #04844b;
+    color: white;
+}
+
+.slds-alert_error {
+    background-color: #c23934;
+    color: white;
+}
+
+.slds-notify h2 {
+    font-size: 0.875rem;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* Form field spacing */
+lightning-input-field {
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 768px) {
+    .slds-col {
+        padding: 0.5rem 0;
+    }
+}
+
+/* Button group styling */
+.slds-text-align_right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Card styling */
+lightning-card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+}
+
+/* Input field focus enhancement */
+lightning-input-field:focus-within {
+    outline: none;
+}
